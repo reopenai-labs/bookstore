@@ -3,3 +3,20 @@ server:
 spring:
   application:
     name: "service-bookstore"
+  r2dbc:
+    url: "r2dbc:h2:file:///./database/bookstore"
+    username: sa
+    password:
+    pool:
+      enabled: true
+      max-size: 2
+      initial-size: 2
+  h2:
+    console:
+      enabled: true
+  messages:
+    basename: i18n/application
+    encoding: UTF-8
+logging:
+  level:
+    org.springframework.r2dbc.core.DefaultDatabaseClient: debug
