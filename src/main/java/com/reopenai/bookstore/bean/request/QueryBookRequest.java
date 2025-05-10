@@ -15,7 +15,7 @@ public class QueryBookRequest {
     @Min(value = 1, message = "The limit cannot less than 1")
     @Max(value = 256, message = "The limit cannot be greater than 256")
     @Schema(description = "limit", defaultValue = "50", minimum = "1", maximum = "256")
-    private int limit;
+    private int limit = 50;
 
     @Schema(description = "cursor", minimum = "1")
     @Min(value = 1, message = "The cursor cannot less than 1")

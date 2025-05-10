@@ -2,13 +2,17 @@ package com.reopenai.bookstore.bean.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 /**
  * Created by Allen Huang
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddBookCategoryRequest {
 
     @NotBlank(message = "name is required")

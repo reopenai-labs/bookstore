@@ -2,7 +2,9 @@ package com.reopenai.bookstore.bean.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
@@ -11,6 +13,8 @@ import java.math.BigDecimal;
  * Created by Allen Huang
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateBookRequest {
 
     @NotNull(message = "id is required")
