@@ -56,6 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(rollbackFor = Exception.class)
     public Mono<BookCategoryVO> update(UpdateBookCategoryRequest request) {
         return bookCategoryRepository.findById(request.getId())
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BusinessException(ErrorCode.DATA_NOT_FOUND, "id=" + request.getId()))))
                 .flatMap(entity -> {
                     if (entity.getName().equals(request.getName())) {
                         return Mono.just(entity);

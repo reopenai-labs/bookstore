@@ -14,9 +14,14 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
   messages:
     basename: i18n/application
     encoding: UTF-8
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:ddl/v1.sql
 logging:
   level:
     org.springframework.r2dbc.core.DefaultDatabaseClient: debug
