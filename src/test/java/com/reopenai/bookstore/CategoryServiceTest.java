@@ -1,12 +1,15 @@
 package com.reopenai.bookstore;
 
 import com.reopenai.bookstore.bean.ErrorCode;
+import com.reopenai.bookstore.bean.entity.BookCategory;
 import com.reopenai.bookstore.bean.request.AddBookCategoryRequest;
 import com.reopenai.bookstore.bean.request.QueryBookCategoryRequest;
 import com.reopenai.bookstore.bean.request.UpdateBookCategoryRequest;
 import com.reopenai.bookstore.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.relational.core.query.Query;
 import reactor.test.StepVerifier;
 
 import java.util.Collections;
@@ -21,10 +24,13 @@ public class CategoryServiceTest extends BaseServiceTest {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private R2dbcEntityTemplate r2dbcEntityTemplate;
+
     @Test
     public void createDuplicateEntityTest() {
         AddBookCategoryRequest request = new AddBookCategoryRequest();
-        request.setName("test0");
+        request.setName("Fiction");
         StepVerifier.create(categoryService.create(request))
                 .expectErrorSatisfies(ex -> matchBizError(ex, ErrorCode.BOOK_CATEGORY_EXISTS))
                 .verify();
@@ -57,9 +63,9 @@ public class CategoryServiceTest extends BaseServiceTest {
     public void updateEntityTest() {
         UpdateBookCategoryRequest request = new UpdateBookCategoryRequest();
         request.setId(1L);
-        request.setName("test0");
+        request.setName("Fiction");
         StepVerifier.create(categoryService.update(request))
-                .assertNext(entity -> assertThat(entity.getName()).isEqualTo("test0"))
+                .assertNext(entity -> assertThat(entity.getName()).isEqualTo("Fiction"))
                 .verifyComplete();
 
         request.setName("test case update entity");

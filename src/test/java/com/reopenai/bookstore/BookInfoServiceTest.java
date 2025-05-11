@@ -78,12 +78,12 @@ public class BookInfoServiceTest extends BaseServiceTest {
     @Test
     public void queryByAuthorTest() {
         QueryBookRequest request = new QueryBookRequest();
-        request.setAuthor("Test");
+        request.setAuthor("A");
         StepVerifier.create(bookInfoService.queryBooks(request))
                 .assertNext(entities -> {
                     assertThat(entities.size()).isGreaterThan(0);
                     for (BookDetailVO book : entities) {
-                        assertThat(book.getTitle()).contains("Test");
+                        assertThat(book.getAuthor()).contains("A");
                     }
                 })
                 .verifyComplete();
@@ -93,12 +93,12 @@ public class BookInfoServiceTest extends BaseServiceTest {
     @Test
     public void queryByTitleTest() {
         QueryBookRequest request = new QueryBookRequest();
-        request.setTitle("Title");
+        request.setTitle("T");
         StepVerifier.create(bookInfoService.queryBooks(request))
                 .assertNext(entities -> {
                     assertThat(entities.size()).isGreaterThan(0);
                     for (BookDetailVO book : entities) {
-                        assertThat(book.getTitle()).contains("Title");
+                        assertThat(book.getTitle()).contains("T");
                     }
                 })
                 .verifyComplete();
