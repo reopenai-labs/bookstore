@@ -32,14 +32,4 @@ public class BusinessException extends RuntimeException {
         this.args = args;
     }
 
-    public BusinessException(Throwable cause, ErrorCode errorCode, Object... args) {
-        this(Locale.SIMPLIFIED_CHINESE, cause, errorCode, args);
-    }
-
-    public BusinessException(Locale locale, Throwable cause, ErrorCode errorCode, Object... args) {
-        super(I18nUtil.parseLocaleMessage(locale, errorCode, args), cause);
-        this.errorCode = errorCode;
-        this.args = args;
-    }
-
 }

@@ -11,10 +11,6 @@ spring:
       enabled: true
       max-size: 2
       initial-size: 2
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   messages:
     basename: i18n/application
     encoding: UTF-8

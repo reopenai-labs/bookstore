@@ -74,7 +74,9 @@ public class BookInfoServiceImpl implements BookInfoService {
                             });
                 })
                 .flatMap(this::converterBookDetailVO)
-                .switchIfEmpty(Mono.error(new BusinessException(ErrorCode.DATA_NOT_FOUND, "id=" + request.getId())));
+                .switchIfEmpty(Mono.create(sink ->
+                        sink.error(new BusinessException(ErrorCode.DATA_NOT_FOUND, "id=" + request.getId()))
+                ));
     }
 
     public Mono<List<BookDetailVO>> queryBooks(QueryBookRequest request) {

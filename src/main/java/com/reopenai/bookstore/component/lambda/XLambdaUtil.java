@@ -1,13 +1,11 @@
 package com.reopenai.bookstore.component.lambda;
 
-import com.reopenai.bookstore.component.reflect.XReflectUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ClassUtils;
 
 import java.io.Serializable;
-import java.lang.invoke.MethodType;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,8 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public final class XLambdaUtil {
 
-    private static final Map<Class<?>, SerializedLambda> SERIALIZED_LAMBDA_CACHE = new ConcurrentHashMap<>();
+    private static final String GET = "get";
+    private static final String SET = "set";
+    private static final String IS = "is";
 
+    private static final Map<Class<?>, SerializedLambda> SERIALIZED_LAMBDA_CACHE = new ConcurrentHashMap<>();
 
     /**
      * Retrieves the property name from a lambda expression, where the method must be a getter or setter that complies with the Java Bean specification. Example:
@@ -32,44 +33,29 @@ public final class XLambdaUtil {
      * @return property name
      */
     public static <T> String property(XFunction<T, ?> serializable) {
-        return parseMethodName(serializable);
+        SerializedLambda lambda = resolve(serializable);
+        return methodToProperty(lambda.getImplMethodName());
     }
 
     /**
-     * Gets the method name of this lambda expression.
+     * Converts getter/setter names to property names
      *
-     * @param serializable lambda instance
-     * @return method name
+     * @param name getter/setter method name
+     * @return property name
      */
-    public static <T> String getMethodName(XFunction<T, ?> serializable) {
-        SerializedLambda lambda = resolve(serializable);
-        return lambda.getImplMethodName();
-    }
-
-
-    private static <T> Method parseMethod(XFunction<T, ?> serializable) {
-        SerializedLambda lambda = resolve(serializable);
-        return parseMethod(lambda);
-    }
-
-    private static Method parseMethod(SerializedLambda lambda) {
-        try {
-            String className = lambda.getImplClass().replace('/', '.');
-            String methodName = lambda.getImplMethodName();
-            ClassLoader classLoader = XReflectUtil.getClassLoader();
-            Class<?> implClass = ClassUtils.forName(className, classLoader);
-            String methodSignature = lambda.getImplMethodSignature();
-            MethodType methodType = MethodType.fromMethodDescriptorString(methodSignature, implClass.getClassLoader());
-            Class<?>[] parameterTypes = methodType.parameterArray();
-            return implClass.getDeclaredMethod(methodName, parameterTypes);
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
-            throw new IllegalArgumentException(e);
+    private static String methodToProperty(String name) {
+        if (name.startsWith(IS)) {
+            name = name.substring(2);
+        } else if (name.startsWith(GET) || name.startsWith(SET)) {
+            name = name.substring(3);
+        } else {
+            log.warn("{} is not a getter/setter method.", name);
+            return null;
         }
-    }
-
-    private static String parseMethodName(Serializable serializable) {
-        SerializedLambda lambda = resolve(serializable);
-        return XReflectUtil.methodToProperty(lambda.getImplMethodName());
+        if (name.length() == 1 || (name.length() > 1 && !Character.isUpperCase(name.charAt(1)))) {
+            name = name.substring(0, 1).toLowerCase(Locale.ENGLISH) + name.substring(1);
+        }
+        return name;
     }
 
     private static SerializedLambda resolve(Serializable serializable) {

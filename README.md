@@ -30,6 +30,41 @@ Performance Benefits
 
 With deep hands-on experience in `Netty` and `WebFlux`, I have successfully implemented reactive architectures in multiple high-concurrency production environments, achieving stable performance at `100,000+ QPS`.
 
+### 1.4 Project Layout
+Main directory：
+```text
+.
+├── database: H2 database persistence file directory
+└── src: 
+    ├── main
+    │   ├── java: Java source code directory
+    │   └── resources
+    │       ├── ddl: Database scripts
+    │       └── i18n: Internationalization configuration files
+    └── test: Unit test files
+```
+
+Source code directory：
+```text
+.
+├── bean: Pojo
+│   ├── entity: Database entity class
+│   ├── request：request parameter
+│   └── vo: Response struct
+├── component
+│   ├── constants: Constants
+│   ├── database: Database configuration and utility classes
+│   ├── exception: Business exception definitions
+│   ├── i18n: Internationalization configuration and utilities
+│   ├── jackson: Jackson configuration class
+│   ├── lambda: Lambda utility class
+│   ├── springdoc: SpringDoc configuration
+│   └── webflux: WebFlux configuration
+├── controller: Routing layer
+├── repository: Persistence layer
+└── service: Business logic layer
+```
+
 ## 2. Usage Instructions
 
 ### 2.1 How to Start the Project
@@ -38,6 +73,21 @@ With deep hands-on experience in `Netty` and `WebFlux`, I have successfully impl
 
 ### 2.2 How to Access API Documentation
 Once the system is started successfully, you can view the API documentation by visiting the [Swagger UI](http://localhost:8080/swagger-ui.html)
+
+### 2.3 How to run unit tests
+
+Run the Maven command:
+
+```shell
+mvn test
+```
+
+### 2.4 How to compile the project
+
+Run the Maven command:
+```shell
+mvn clean package -Dmaven.test.skip=true
+```
 
 ## 3. Unit Testing
 This project employs a layered testing strategy to ensure code quality and functional reliability:
